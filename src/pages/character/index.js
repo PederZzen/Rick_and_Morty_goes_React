@@ -23,6 +23,7 @@ const Character = () => {
       }
     };
     fetchCharacter();
+    
   }, [id, setEpisode]);
   
   useEffect(() => {

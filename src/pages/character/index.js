@@ -1,58 +1,45 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { EpiContext } from '../../context/EpisodeContext'
 import { BASE_URL } from '../../utils/Constants'
 
 const Character = () => {
 
-  const [char, setChar] = useState(null)
-  const [episodes, setEpisodes] = useState(null)
-  const [episode, setEpisode] = useState({})
-  const { id } = useParams()
-
-  // useEffect(() => {
-  //   const fetchEpisodes = async () => {
-  //     fetch(`${BASE_URL}/episode/${[episodes]}`)
-  //       .then((res => res.json()))
-  //       .then((data => {
-  //         console.log(data);
-  //         // setEpisode(data)
-  //       }))
-  //   }
-
-  //   const fetchCharacter = async () => {
-  //     fetch(BASE_URL + "/character/" + id)
-  //      .then((res => res.json()))
-  //      .then((data => {
-  //       setChar(data)
-  //       setEpisodes(data.episode.map((e) => {
-  //         return (e.slice(-2));
-  //       }))
-  //       fetchEpisodes()
-  //     }))
-  //   }
-  //   fetchCharacter()
-  // },[])
-
+  const [char, setChar] = useState(null);
+  const [episodes, setEpisodes] = useState(null);
+  const { id } = useParams();
+  const { episode, setEpisode } = useContext(EpiContext);
+  
   useEffect(() => {
-    async function fetchCharacter () {
-      const response = await fetch(BASE_URL + "/character/" + id)
-      const data = await response.json()
-      console.log(data);
-      setChar(data)
-      setEpisodes(data.episode.map((e) => {
-        return (e.slice(-2));
-      }))
-
-      if(data) {
-        const response2 = await fetch(`${BASE_URL}/episode/${[episodes]}`)
-        const data2 = await response2.json()
-        console.log(data2);
+    const fetchCharacter = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/character/${id}`);
+        const data = await response.json();
+        setChar(data);
+        setEpisode(data.episode.map((e) => e.slice(40)));
+      } catch (error) {
+        console.error(error);
       }
+    };
+    fetchCharacter();
+  }, [id, setEpisode]);
+  
+  useEffect(() => {
+    const fetchEpisodes = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/episode/${episode}`);
+        const data = await response.json();
+        setEpisodes(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (episode) {
+      fetchEpisodes();
     }
-    fetchCharacter()
-  },[])
-
+  }, [episode]);
+  
   if (!char) {
     return <p>No data..</p>
   }
@@ -75,9 +62,11 @@ const Character = () => {
       <p>{char.location.name}</p>
       <h3>Origin</h3>
       <p>{char.origin.name}</p>
-      <h3>Appeared on</h3>
+      <h3>Appeared on ({char.episode.length})</h3>
       <ul>
-
+        {episodes ? episodes.map((e, idx) => {
+          return <li key={idx}>{e.name}</li>
+        }) : "No data"}
       </ul>
     </div>
   )

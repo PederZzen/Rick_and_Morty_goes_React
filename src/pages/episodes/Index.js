@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useReducer, useState } from 'react'
 import Item from './Item'
 import { EpiContext } from '../../context/EpisodeContext'
 import { BASE_URL } from '../../utils/Constants'
-import reducer from '../../components/pagination/Index'
+import reducer from '../../components/pagination'
 
 const initialState = { page: 1 }
 

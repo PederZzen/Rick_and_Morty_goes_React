@@ -1,9 +1,10 @@
-import React, { useContext, useEffect, useReducer, useRef, useState } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useContext, useEffect, useReducer, useState } from 'react'
 import { BASE_URL } from '../../utils/Constants'
 import { CharContext } from '../../context/CharacterContext'
-import Item from './Item'
-import reducer from '../../components/pagination/Index'
-
+import './index.scss'
+import reducer from '../../components/pagination'
+import Item from '../../components/characters/Item'
 
 const initialState = { page: 1 }
 
@@ -13,7 +14,6 @@ const Characters = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
   const [totalPages, setTotalPages] = useState("")
   const [search, setSearch] = useState("")
-
 
   useEffect(() => {
     const fetchCharacters = async () => {
@@ -29,15 +29,19 @@ const Characters = () => {
   
   }, [state.page, search])
 
+
   return (
     <div>
-      <h1>Characters</h1>
-      <div>
+      <div className='header'>
+        <h1>Characters</h1>
         <input type="text" placeholder='Search for character' onChange={(e) => setSearch(e.target.value)}></input>
+        <p>Page <span>{state.page}</span> of <span>{totalPages}</span></p>
+        <div className='buttons'>
+          <button onClick={() => dispatch({type:"previous"})}>Previous Page</button>
+          <button onClick={() => dispatch({type:"next"})}>Next Page</button>
+        </div>
       </div>
-      <button onClick={() => dispatch({type:"previous"})}>Previous Page</button>
-      <button onClick={() => dispatch({type:"next"})}>Next Page</button>
-      <p>Page {state.page} of {totalPages}</p>
+
       <div className='characterList'>
         {char ? char.map((e, idx) => {
           return <Item key={idx} character={e}>{e.name}</Item>

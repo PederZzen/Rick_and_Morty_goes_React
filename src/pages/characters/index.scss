@@ -1,0 +1,53 @@
+.characterList {
+    background-color: #272B33;
+    display: grid;
+    grid-template-columns: 300px 300px 300px 300px;
+    gap: 2rem;
+    justify-content: center;
+    padding: 4rem 0;
+
+    .characterItem {
+        height: 300px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        text-align: center;
+        position: relative;
+        border-radius: 1rem;
+
+        div {
+            display: flex;
+            border-radius: 1rem;
+            align-items: flex-end;
+            justify-content: center;
+            background-color: #3C3E44;
+            width: 100%;
+            height: 100%;
+            padding: 1rem;
+            position: absolute;
+            bottom: 0;
+        }
+
+        h2 {
+            color: white;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            bottom: 0;
+            z-index: 2;
+            border-radius: 1rem;
+            box-shadow: 0 0 4px 2px #272B33;
+            transition: all .3s;
+            
+            &:hover {
+                bottom: 5rem;
+                rotate: 5deg;
+            }
+        }
+
+    }
+}

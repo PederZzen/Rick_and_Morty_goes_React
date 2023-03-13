@@ -1,13 +1,15 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import Home from './pages/home/Index'
+import './assets/global.scss'
+
+import Home from './pages/home'
 import Characters from './pages/characters'
 import Character from './pages/character'
-import Episodes from './pages/episodes/Index'
-import Episode from './pages/episode/Index'
-import Locations from './pages/locations/Index'
-import Nav from './components/nav/Index'
-import Location from './pages/location/Index'
+import Episodes from './pages/episodes'
+import Episode from './pages/episode'
+import Locations from './pages/locations'
+import Nav from './components/nav'
+import Location from './pages/location'
 
 const App = () => {
   return (

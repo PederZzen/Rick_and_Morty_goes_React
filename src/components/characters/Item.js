@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom'
 
 const Item = ({ character }) => {
     return (
-        <div>
-            <Link to={`/character/${character.id}`}>
+        <Link className="characterItem" to={`/character/${character.id}`}>
+            <div>
                 <h2>{character.name}</h2>
-                <img src={character.image} alt={`An image of ${character.name}`}></img>
-            </Link>
-        </div>
+            </div>
+            <img src={character.image} alt={`An image of ${character.name}`}></img>
+        </Link>
     )
 }
 export default Item

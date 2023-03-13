@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const EpisodeItem = ({episode}) => {
+const Item = ({episode}) => {
     return (
         <div>
             <Link to={`/episode/${episode.id}`}>
@@ -11,4 +11,4 @@ const EpisodeItem = ({episode}) => {
     )
 }
 
-export default EpisodeItem
+export default Item

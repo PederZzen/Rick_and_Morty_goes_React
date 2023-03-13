@@ -1,13 +1,13 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import Home from './pages/Home'
-import Characters from './pages/Characters'
-import Character from './pages/Character'
-import Episodes from './pages/Episodes'
-import Episode from './pages/Episode'
-import Locations from './pages/Locations'
-import Nav from './components/global/Nav'
-import Location from './pages/Location'
+import Home from './pages/home/Index'
+import Characters from './pages/characters'
+import Character from './pages/character'
+import Episodes from './pages/episodes/Index'
+import Episode from './pages/episode/Index'
+import Locations from './pages/locations/Index'
+import Nav from './components/nav/Index'
+import Location from './pages/location/Index'
 
 const App = () => {
   return (

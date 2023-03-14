@@ -3,72 +3,92 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { EpiContext } from '../../context/EpisodeContext'
 import { BASE_URL } from '../../utils/Constants'
+import Item from '../episodes/Item'
+import './index.scss'
 
 const Character = () => {
 
-  const [char, setChar] = useState(null);
-  const [episodes, setEpisodes] = useState(null);
   const { id } = useParams();
+  const [char, setChar] = useState(null);
   const { episode, setEpisode } = useContext(EpiContext);
-  
+  const [epiWithChar, setEpiWithChar] = useState([])
+
   useEffect(() => {
     const fetchCharacter = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/character/${id}`);
-        const data = await response.json();
-        setChar(data);
-        setEpisode(data.episode.map((e) => e.slice(40)));
-      } catch (error) {
-        console.error(error);
+        const res = await fetch(`${BASE_URL}/character/${id}`);
+        const data = await res.json()
+        setChar(data)
+        setEpisode(data.episode);
       }
-    };
-    fetchCharacter();
-    
-  }, [id, setEpisode]);
-  
+      catch (err) {
+        console.error(err);
+      }
+    }
+
+    fetchCharacter()
+
+  }, [id, setEpisode])
+
   useEffect(() => {
     const fetchEpisodes = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/episode/${episode}`);
-        const data = await response.json();
-        setEpisodes(data);
-      } catch (error) {
-        console.error(error);
+        const res = await fetch(`${BASE_URL}/episode/${episode.map((e) => {
+          return e.slice(40)
+        })}`)
+        const data = await res.json()
+        setEpiWithChar(data)
       }
-    };
-    if (episode) {
-      fetchEpisodes();
+      catch (err) {
+        console.error(err);
+      }
     }
-  }, [episode]);
+    
+    if (episode) {
+      fetchEpisodes()
+    }
+
+  }, [episode])
   
   if (!char) {
     return <p>No data..</p>
   }
 
   return (
-    <div>
-      <h1>{char.name}</h1>
-      <img 
-        src={char.image} 
-        alt={`An image of ${char.name}`}>
-      </img>
-      <h2>Details</h2>
-      <p>
-        {char.species}
-        {char.type ? ` (${ char.type })` : ""}
-        {char.gender !== "unknown" ? ` - ${char.gender}` : ""}
-      </p>
-      <p>{char.status !== "unknown" ? char.status : ""}</p>
-      <h3>Location</h3>
-      <p>{char.location.name}</p>
-      <h3>Origin</h3>
-      <p>{char.origin.name}</p>
-      <h3>Appeared on ({char.episode.length})</h3>
-      <ul>
-        {episodes ? episodes.map((e, idx) => {
-          return <li key={idx}>{e.name}</li>
-        }) : "No data"}
-      </ul>
+    <div className='container'>
+      <div className='wrapper'>
+        <div className='left'>
+          <h1>{char.name}</h1>
+          <div>
+            <img 
+              src={char.image} 
+              alt={`An image of ${char.name}`}>
+            </img>
+          </div>
+          <div className='details'>
+            <h2>Details</h2>
+            <p>
+              {char.species}
+              {char.type ? ` (${ char.type })` : ""}
+              {char.gender !== "unknown" ? ` - ${char.gender}` : ""}
+            </p>
+            <p className={char.status === "Alive" ? "alive" : "dead"}>{char.status !== "unknown" ? char.status : ""}</p>
+            <h3>Location</h3>
+            <p>{char.location.name}</p>
+            <h3>Origin</h3>
+            <p>{char.origin.name}</p>
+          </div>
+        </div>
+        <div className='right'>
+          <h2>Appeared on ({char.episode.length})</h2>
+          <ul>
+            {epiWithChar.length > 1 ? epiWithChar.map((e, idx) => {
+              return <Item key={idx} episode={e}>{e.name}</Item>
+            }) : "" }
+            {epiWithChar ? <Item key={epiWithChar.id} episode={epiWithChar}>{epiWithChar.name}</Item> : "No data"}
+          </ul>
+        </div>
+      </div>
     </div>
   )
 }

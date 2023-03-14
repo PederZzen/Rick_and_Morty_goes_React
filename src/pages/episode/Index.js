@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { BASE_URL } from '../../utils/Constants'
 import Item from '../../components/characters/Item'
+import { CharContext } from '../../context/CharacterContext'
+import { EpiContext } from '../../context/EpisodeContext'
 
 const Episode = () => {
 
-    const [episode, setEpisode] = useState(null)
-    const [char, setChar] = useState(null)
-    const [character, setCharacter] = useState(null)
     const { id } = useParams()
+    const {episode, setEpisode} = useContext(EpiContext)
+    const {char, setChar} = useContext(CharContext)
+    const [charInEp, setCharInEp] = useState(null)
 
     useEffect(() => {
         const fetchEpisode = async () => {
             try {
-                const response = await fetch(`${BASE_URL}/episode/${id}`)
-                const data = await response.json()
+                const res = await fetch(`${BASE_URL}/episode/${id}`)
+                const data = await res.json()
                 setEpisode(data)
-                setChar(data.characters.map((e)=>{
-                    return e.slice(42)
-                }));
+                setChar(data.characters);
             }
             catch (error) {
                 console.error(error);
@@ -32,21 +32,21 @@ const Episode = () => {
     useEffect(() => {
         const fetchCharacters = async () => {
             try {
-                const response = await fetch(`${BASE_URL}/character/${[char]}`)
-                const data = await response.json()
-                console.log(data);;
-                setCharacter(data)
-                console.log(data);
+                const res = await fetch(`${BASE_URL}/character/${char.map((e) => {
+                    return e.slice(42)
+                })}`)
+                const data = await res.json()
+                setCharInEp(data)
             }
             catch (error) {
                 console.error(error);
             }
-        }
+        } 
 
         if (char) {
             fetchCharacters()
         }
-        
+
     }, [char])
 
     if (!episode) {
@@ -61,9 +61,10 @@ const Episode = () => {
             <p>{episode.air_date}</p>
             <h3>Characters in the episode</h3>
             <ul>
-                {character ? character.map((e, idx) => {
-                    return <Item key={idx} character={e}>{e.name}</Item>
+                {charInEp ? charInEp.map((e, idx) => {
+                    return <Item key={idx} character={e}>{}e</Item> 
                 }) : "No data"}
+
             </ul>
         </div>
     )

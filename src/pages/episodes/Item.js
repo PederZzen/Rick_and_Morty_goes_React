@@ -5,7 +5,7 @@ const Item = ({episode}) => {
     return (
         <div>
             <Link to={`/episode/${episode.id}`}>
-                <p>{episode.id}. {episode.name}</p>
+                <p>{episode.episode} {episode.name}</p>
             </Link>
         </div>
     )
